@@ -1,0 +1,47 @@
+class API {
+  // User
+  Uri userRegister = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/Register.php");
+  Uri webUserRegister = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/RegisterUID.php");
+  Uri saveUserInfo = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/SaveUserInfo.php");
+  Uri requestLoyalty = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/RequestLoyalty.php");
+  Uri getProfile = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/GetProfile.php");
+
+  // Home Data API
+  /// returns all data required for the home page
+  Uri home = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/Home.php");
+
+  // Item API's
+  Uri items = Uri.parse("http://api.cookfactor.in/mobileapi/Item/List.php");
+  Uri itemRetrive = Uri.parse("http://api.cookfactor.in/mobileapi/Item/Retrieve.php");
+
+  // Category API's
+  Uri categories = Uri.parse("http://api.cookfactor.in/mobileapi/Category/List.php");
+  Uri categoryRetrive = Uri.parse("http://api.cookfactor.in/mobileapi/Category/Retrieve.php");
+
+  // Fav API's
+  Uri favourites = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/GetFavourites.php");
+  Uri setFavourite = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/SetFavourite.php");
+
+  // Search
+  Uri search = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/Search.php");
+
+  // Cart
+  Uri addToCart = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/AddToCart.php");
+  Uri getCart = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/GetCart.php");
+
+  // Order
+  Uri getCheckoutData = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/GetCheckoutData.php");
+  Uri createOrder = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/CreateOrder.php");
+  Uri getOrders = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/GetOrders.php");
+  Uri getOrder = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/GetOrder.php");
+  Uri getOrderSummary = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/GetOrderSummary.php");
+  Uri initPayment = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/InitPayment.php");
+  static const String makePayment =
+      "https://api.teaknet.org/cookfactor/mobileapi/CurrentUser/MakePayment.php?transaction_no=";
+
+  // Address
+  Uri addAddress = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/SaveAddress.php");
+
+  // Web Register
+  //Uri addAddress = Uri.parse("http://api.cookfactor.in/mobileapi/CurrentUser/SaveAddress.php");
+}
