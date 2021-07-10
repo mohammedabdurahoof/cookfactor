@@ -38,7 +38,7 @@ function App() {
       <Route exact path='/new-user'>
         <NewUser />
       </Route>
-      <Route exact path='/product'>
+      <Route exact path='/product/:id'>
         <Product />
       </Route>
     </Router>

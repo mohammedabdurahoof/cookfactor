@@ -1,7 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Slider from "react-slick";
+import {CategoryContext} from '../../store/Context'
 
-function Categories() {
+function Categories(props) {
+    const {setCategory} = useContext(CategoryContext)
+    var activeClass = (e,index) => {
+        var current = document.getElementsByClassName("active");
+        if (current.length > 0) {
+            current[0].className = current[0].className.replace(" active", "");
+        }
+        e.target.className += " active";
+        let span = document.getElementById(index)
+        setCategory(span.innerHTML)
+    }
 
     var settings = {
         infinite: false,
@@ -14,54 +25,18 @@ function Categories() {
     return (
 
         <div className="categories" >
-                <Slider {...settings} className="categories-content" id="categories">
-                    <div className="categories-div">
-                        <button className="categories-button cf-border  ">Ready to cook</button>
-                    </div>
-
-                    <div className="categories-div">
-                        <button className="categories-button cf-border  ">Chicken</button>
-                    </div>
-
-                    <div className="categories-div">
-                        <button className="categories-button cf-border  ">Mutton</button>
-                    </div>
-
-                    <div className="categories-div">
-                        <button className="categories-button cf-border  ">Fish</button>
-                    </div>
-
-                    <div className="categories-div">
-                        <button className="categories-button cf-border  ">Beef</button>
-                    </div>
-
-
-                    <div className="categories-div">
-                        <button className="categories-button cf-border  ">Buffalo</button>
-                    </div>
-
-
-                    <div className="categories-div">
-                        <button className="categories-button cf-border  ">Spring Chicken</button>
-                    </div>
-
-
-                    <div className="categories-div">
-                        <button className="categories-button cf-border  ">Pickel</button>
-                    </div>
-
-
-                    <div className="categories-div">
-                        <button className="categories-button cf-border  ">Duck</button>
-                    </div>
-
-                    <div className="categories-div">
-                        <button className="categories-button cf-border  ">Quail</button>
-                    </div>
-
-
-                </Slider>
-            </div>
+            <Slider {...settings} className="categories-content" id="categories">
+                {
+                    props.category && props.category.map((category, index) => {
+                        return (
+                            <div className="categories-div" key={index} >
+                                <button className="categories-button cf-border" onClick={(e) => activeClass(e,index)}><span id={index} hidden >{category.category_reference}</span>{category.description}</button>
+                            </div>
+                        )
+                    })
+                }
+            </Slider>
+        </div>
     );
 }
 

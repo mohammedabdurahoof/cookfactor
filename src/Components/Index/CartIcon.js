@@ -1,13 +1,15 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 
-function CartIcon() {
+function CartIcon(props) {
+    const history = useHistory()
     return (
-        <a href="cart.html">
+        <div onClick={()=>history.push('/cart')} style={{cursor:'pointer'}}>
             <div className="floating-cart">
                 <i className="bi bi-basket "></i>
-                <div className="cart-count">5</div>
+                <div className="cart-count">{props.cart.length}</div>
             </div>
-        </a>
+        </div>
     )
 }
 

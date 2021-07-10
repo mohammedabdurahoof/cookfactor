@@ -1,6 +1,7 @@
 import React from 'react'
+import './Product.css'
 
-function Product() {
+function Product(props) {
     return (
         <div className="container " id="container">
             <div className="go-to-cart-button">
@@ -14,24 +15,18 @@ function Product() {
                     <div className="col-12 mb-3  col-md-5">
                         <div id="product-image">
                             <div className="product-page-image-big"
-                                style={{background: "url(assets/images/image1.jpg)  no-repeat center", backgroundSize: 'cover'}}>
+                                style={{background: `url(${props.item.image})  no-repeat center`, backgroundSize: 'cover'}}>
                                 <button className="fav-btn"><i id="favBtn" className=" bi-heart"></i></button>
                             </div>
                         </div>
                         <h5 className="product-page-title" id="product-title">
-                            CHICKEN GIZZARD-WHOLE FRESH
+                            {props.item.name}
                         </h5>
                         <div className="product-page-price">
-                            <h6><span className=" pr-2" /><span id="og-price" />₹150/KG</h6>
+                            <h6><span className=" pr-2" /><span id="og-price" />₹{props.item.actual_price}/{props.item.unit_of_measurement}</h6>
                         </div>
                         <div className="product-page-desc" id="product-description">
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                cillum dolore eu fugiat nulla pariatur.
-                            </p>
+                            <p>{props.item.description}</p>
                         </div>
                     </div>
 

@@ -27,13 +27,16 @@ function Project(props) {
     )
 }
 
-const items = [
-    'assets/images/image1.jpg',
-    'assets/images/image1.jpg',
-    'assets/images/image1.jpg'
-]
 
-function Banner() {
+
+function Banner(props) {
+    const items = []
+    props.item && props.item.forEach(element => {
+        if(element.offer_item === true){
+            items.push(element.image)
+        }
+    });
+    //console.log(props.banner);
     return (
         <div style={{ height: '100%' }} >
             <Carousel
@@ -45,9 +48,9 @@ function Banner() {
                 cycleNavigation={true}
                 navButtonsAlwaysVisible={false}
                 navButtonsAlwaysInvisible={false}
-                next={(now, previous) => console.log(`Next User Callback: Now displaying child${now}. Previously displayed child${previous}`)}
-                prev={(now, previous) => console.log(`Prev User Callback: Now displaying child${now}. Previously displayed child${previous}`)}
-                onChange={(now, previous) => console.log(`OnChange User Callback: Now displaying child${now}. Previously displayed child${previous}`)}
+                //next={(now, previous) => console.log(`Next User Callback: Now displaying child${now}. Previously displayed child${previous}`)}
+                //prev={(now, previous) => console.log(`Prev User Callback: Now displaying child${now}. Previously displayed child${previous}`)}
+                // onChange={(now, previous) => console.log(`OnChange User Callback: Now displaying child${now}. Previously displayed child${previous}`)}
 
             >
                 {

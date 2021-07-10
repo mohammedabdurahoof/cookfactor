@@ -176,22 +176,6 @@ $('.go-to-cart-button').width(new_width);
 
 
 
-  $('.delivery-slot-boxes').slick({
-  infinite : false,
-  swipeToSlide: true,
-  speed:50,
-  centerMode: false,
-  variableWidth: true
-});
-
-    $('.address-boxes').slick({
-  infinite : false,
-  swipeToSlide: true,
-  centerMode: false,
-  speed:50,
-  variableWidth: true
-});
-
 
 
 
