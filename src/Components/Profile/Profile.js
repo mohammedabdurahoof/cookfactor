@@ -1,16 +1,31 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import Axios from '../../Axios/Axios'
 
 function Profile() {
+    const [user, setUser] = useState({})
+    var phone = localStorage.getItem('phoneNumber')
+
+    useEffect(() => {
+
+        Axios.post('/CurrentUser/GetProfile.php', {
+            "mobile": phone,
+            "version": "1"
+        }).then((res)=>{
+            setUser(res.data.Data.UserInfo)
+        }).catch((err)=>{
+            console.log(err);
+        })
+    }, [])
     return (
         <div className="container">
             <div className="row mt-5 " id="tabs">
                 <div className="col-lg-4 col-md-4 col-12 ">
                     <div className="row">
                         <div className="account cf-border web">
-                            <div className="account-details">
-                                <h5>Name</h5>
-                                <p>example@gmail.com</p>
-                                <p>+91 9343895110</p>
+                            <div className="account-details" style={{overflow:'hidden'}}>
+                                <h5>{user.name}</h5>
+                                <p>{user.email}</p>
+                                <p>{phone}</p>
                             </div>
                         </div>
 
@@ -247,7 +262,7 @@ function Profile() {
 
                     {/* <!-- Tabs content --> */}
                     <div className="tab-content">
-                        <div className="tab-pane   active " id="myInfo" role="tabpanel" aria-labelledby="myInfo">
+                        <div className="tab-pane   active " id="myInfo" role="tabpanel" ariaLabel="myInfo">
                             <h5 className="tab-head">Edit my info</h5>
                             <div className="account cf-border mobile">
                                 <div className="account-details">
@@ -257,7 +272,7 @@ function Profile() {
                                 </div>
                             </div>
                             <form className="edit-my-info" id="userNewForm">
-                                <p style={{color: '#787777', fontWeight: '500'}}>Please fill the details to continue</p>
+                                <p style={{ color: '#787777', fontWeight: '500' }}>Please fill the details to continue</p>
                                 <div className="form-1-div mb-4">
                                     <input type="text" name="username" className="form-1-input " placeholder=" " />
                                     <label className="form-1-label">Your Name</label>
@@ -270,7 +285,7 @@ function Profile() {
                             </form>
                         </div>
 
-                        <div className="tab-pane " id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                        <div className="tab-pane " id="v-pills-profile" role="tabpanel" ariaLabel="v-pills-profile-tab">
                             <h5 className="tab-head">My Orders</h5>
                             <div className="row ">
                                 <div className="col-md-6">
@@ -355,7 +370,7 @@ function Profile() {
 
                         </div>
 
-                        <div className="tab-pane " id="myAddresses" role="tabpanel" aria-labelledby="myAddresses">
+                        <div className="tab-pane " id="myAddresses" role="tabpanel" ariaLabel="myAddresses">
                             <div className="address mb-3">
                                 <h5 className="tab-head">My Addresses</h5>
                                 <button className="delivery-button"><span className="material-icons">add_location_alt</span>Add New
@@ -459,7 +474,7 @@ function Profile() {
                                             <svg className="svg svg-icon" viewBox="0 0 20 20">
                                                 <path
                                                     d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"
-                                                    style={{stroke: 'white',fill:'white'}}></path>
+                                                    style={{ stroke: 'white', fill: 'white' }}></path>
                                             </svg>
                                             <label>Set as Default Address</label>
                                         </div>
@@ -472,7 +487,7 @@ function Profile() {
                             </div>
                         </div>
 
-                        <div className="tab-pane" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">
+                        <div className="tab-pane" id="v-pills-settings" role="tabpanel" ariaLabel="v-pills-settings-tab">
                             <h5 className="tab-head">My Favourites</h5>
                             <div className="row ">
                                 <div className="col-md-6 col-12 mb-4">

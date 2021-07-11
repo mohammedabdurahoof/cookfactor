@@ -20,7 +20,7 @@ function Index() {
         }).catch((err)=>{
             console.log(err);
         })
-    }, [])
+    },[])
 
     return (
         <>
