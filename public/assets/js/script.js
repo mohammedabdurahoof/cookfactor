@@ -1,17 +1,5 @@
 
 
-      
-
-  $(document).on('click', '.add-to-cart', function() {
-       $('.go-to-cart-button').toggleClass("active");
-       $(this).toggleClass("active");
-      
-
-   });
-
-  
-
-
 $(document).on('click', '.delete-button', function() {
        $(".delete-confirm ").addClass("active");
    });

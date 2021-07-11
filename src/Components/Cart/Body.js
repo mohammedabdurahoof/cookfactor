@@ -133,8 +133,6 @@ function Body() {
                                             <div className="cart-box-end">
                                                 <div className="quantity">
                                                     <button className="quantity__minus" style={{width:'100px'}} id="decrementButton" onClick={() =>history.push(`/product/${item.item_reference}`)}><span  >Edit</span></button>
-                                                    {/* <input name="quantity" type="text" className="quantity__input" id={`number${index}`} value={item.quantity} />
-                                                    <button className="quantity__plus" id="incrementButton" onClick={() => setItemQuantity(index,item,'plus')}><span>+</span></button> */}
                                                 </div>
                                                 <div>
                                                     <p className="cart-price">

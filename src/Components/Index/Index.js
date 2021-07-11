@@ -25,6 +25,7 @@ function Index() {
                 "mobile": phone,
                 "version": "1"
             }).then((response) => {
+                console.log(response.data.Data);
                 var data = response.data.Data
                 setCart(data.Cart)
                 setCategory(data.Category)

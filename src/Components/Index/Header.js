@@ -11,6 +11,7 @@ import Axios from '../../Axios/Axios';
 
 function Header(props) {
     const history = useHistory()
+    console.log(props.userInfo);
     const item = props.item
 
     const search = (value)=>{

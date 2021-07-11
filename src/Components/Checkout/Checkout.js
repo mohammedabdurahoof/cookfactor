@@ -1,7 +1,64 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Slider from "react-slick";
+import Axios from '../../Axios/Axios'
 
 function Checkout() {
+    const [addresses, setAddresses] = useState([])
+    const [deliverySlots, setDeliverySlots] = useState([])
+    const [items, setItems] = useState([])
+    const [total, setTotal] = useState([])
+    const [overAlltotal, setOverAllTotal] = useState([])
+    const [payment, setPayment] = useState('')
+    const [pickup, setPickup] = useState(true)
+    const [selectedAddress, setSelectedAddress] = useState({})
+    const [selectedDeliverySlot, setSelectedDeliverySlot] = useState('')
+
+    useEffect(() => {
+        var phone = localStorage.getItem('phoneNumber')
+        Axios.post('/CurrentUser/GetCheckoutData.php', {
+            "mobile": phone,
+            "version": "1"
+        }).then((res) => {
+            console.log(res.data);
+            setAddresses(res.data.Data.Addresses)
+            setDeliverySlots(res.data.Data.DeliverySlots)
+            setItems(res.data.Data.Items)
+            for (let i = 0; i < items.length; i++) {
+                var sum = items[i].quantity * items[i].price + items[i].cleaning_charge + items[i].skin_removal_charge + items[i].cutting_charge
+                console.log(sum);
+                console.log(total);
+                setTotal([...total, sum]);
+
+
+            }
+            console.log(total);
+            var sum = 0
+            res.data.Data.Items.forEach(item => {
+                sum += parseFloat(item.quantity * item.price + item.cleaning_charge + item.skin_removal_charge + item.cutting_charge)
+            });
+            setOverAllTotal(sum)
+
+        }).catch((err) => {
+            console.log(err);
+        })
+    }, [])
+
+    const placeOrder = () => {
+        var phone = localStorage.getItem('phoneNumber')
+        if (payment === 'COD') {
+            Axios.post('/CurrentUser/CreateOrder.php', {
+                "mobile": phone,
+                "version": "1",
+                "delivery_type": pickup ? "P" : "D",
+                "address_reference": pickup ? "0" : selectedAddress,
+                "deliveryslot_reference": pickup ? "0" : selectedDeliverySlot,
+                "payment_method": "COD"
+            })
+        } else {
+
+        }
+    }
+
     var settings1 = {
         infinite: false,
         swipeToSlide: true,
@@ -28,24 +85,36 @@ function Checkout() {
                     <div className="delivery-type-box cf-border">
                         <div className="delivery-type-box-content">
                             <div className="option-box">
-                                <label className="cont-box first"><span>Pickup From Store</span>
-                                    <input type="radio" checked="checked" name="delivery" />
+                                <label className="cont-box first"  ><span>Pickup From Store</span>
+                                    <input type="radio" checked="checked" name="delivery" onClick={() => setPickup(true)} />
                                     <span className="checkmark"></span>
                                 </label>
                                 <label className="cont-box "><span>Home Delivery</span>
-                                    <input type="radio" name="delivery" />
+                                    <input type="radio" name="delivery" onClick={() => setPickup(false)} />
                                     <span className="checkmark"></span>
                                 </label>
                             </div>
                         </div>
                     </div>
                     <div className="delivery-slot">
-                        <h4 className="sub-head">Delivery Slots(Mon, 21 Feb 2021)</h4>
+                        <h4 className="sub-head">Delivery Slots({Date.toString()})</h4>
                         <Slider {...settings1} className="delivery-slot-boxes">
-                            <button className="delivery-slot-box cf-border">Immediate </button>
-                            <button className="delivery-slot-box cf-border">Morning Slot (07:00AM - 10:00AM)</button>
-                            <button className="delivery-slot-box cf-border">Afternoon Slot (11:00AM - 02:00PM)</button>
-                            <button className="delivery-slot-box cf-border">Evening Slot (04:00PM - 07:00PM)</button>
+                            {
+                                deliverySlots.map((slot) => {
+                                    return (
+                                        <button className="delivery-slot-box cf-border" onClick={(e) => {
+                                            setSelectedDeliverySlot(slot.description)
+                                            var current = document.getElementsByClassName("active");
+                                            if (current.length > 0) {
+                                                current[0].className = current[0].className.replace(" active", "");
+                                            }
+                                            e.target.className += " active";
+                                        }} >{slot.description} </button>
+
+                                    )
+
+                                })
+                            }
                         </Slider>
                     </div>
                     <div className="address-block">
@@ -90,84 +159,47 @@ function Checkout() {
                             </div>
                         </div>
                         <Slider {...settings2} className="address-boxes">
-                            <div className="address-box cf-border " style={{width: '250px'}} >
-                                <div className="select-icon">
-                                    <i className="bi bi-check-square-fill"></i>
-                                </div>
-                                <div className="address-1">
-                                    <h6>Kochi</h6>
-                                </div>
-                                <div className="address-2">
-                                    <h6>Kaloor</h6>
-                                </div>
-                                <div className="address-3">
-                                    <h6>jsndfi</h6>
-                                </div>
-                                <div className="Pincode">
-                                    <h6>676122</h6>
-                                </div>
-                            </div>
-                            <div className="address-box cf-border " style={{width: '250px'}} >
-                                <div className="select-icon">
-                                    <i className="bi bi-check-square-fill"></i>
-                                </div>
-                                <div className="address-1">
-                                    <h6>Kochi</h6>
-                                </div>
-                                <div className="address-2">
-                                    <h6>Kaloor</h6>
-                                </div>
-                                <div className="address-3">
-                                    <h6>jsndfi</h6>
-                                </div>
-                                <div className="Pincode">
-                                    <h6>676122</h6>
-                                </div>
-                            </div>
-                            <div className="address-box cf-border " style={{width: '250px'}} >
-                                <div className="select-icon">
-                                    <i className="bi bi-check-square-fill"></i>
-                                </div>
-                                <div className="address-1">
-                                    <h6>Kochi</h6>
-                                </div>
-                                <div className="address-2">
-                                    <h6>Kaloor</h6>
-                                </div>
-                                <div className="address-3">
-                                    <h6>jsndfi</h6>
-                                </div>
-                                <div className="Pincode">
-                                    <h6>676122</h6>
-                                </div>
-                            </div>
-                            <div className="address-box cf-border " style={{width: '250px'}} >
-                                <div className="select-icon">
-                                    <i className="bi bi-check-square-fill"></i>
-                                </div>
-                                <div className="address-1">
-                                    <h6>Kochi</h6>
-                                </div>
-                                <div className="address-2">
-                                    <h6>Kaloor</h6>
-                                </div>
-                                <div className="address-3">
-                                    <h6>jsndfi</h6>
-                                </div>
-                                <div className="Pincode">
-                                    <h6>676122</h6>
-                                </div>
-                            </div>
+                            {
+                                addresses.map((address) => {
+                                    return (
+                                        <div className="address-box cf-border " style={{ width: '250px', inlineSize: '1' }} onClick={(e) => {
+                                            setSelectedAddress(address)
+                                            var current = document.getElementsByClassName("active");
+                                            if (current.length > 0) {
+                                                current[0].className = current[0].className.replace(" active", "");
+                                            }
+                                            e.target.className += " active";
+                                        }} >
+                                            <div className="select-icon">
+                                                <i className="bi bi-check-square-fill"></i>
+                                            </div>
+                                            <div className="address-1">
+                                                <h6>{address.address_line1}</h6>
+                                            </div>
+                                            <div className="address-2">
+                                                <h6>{address.address_line2}</h6>
+                                            </div>
+                                            <div className="address-3">
+                                                <h6>{address.address_line3}</h6>
+                                            </div>
+                                            <div className="Pincode">
+                                                <h6>{address.pin_code}</h6>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
+
                         </Slider>
                     </div>
                     <div className="payment-block cf-border">
                         <div className="option-box">
                             <label className="cont-box first"><span>Cash on Delivery</span>
-                                <input type="radio" checked="checked" name="pay" />
+                                <input type="radio" checked="checked" name="pay" onClick={() => setPayment('COD')} />
                                 <span className="checkmark"></span>
                             </label>
                             <label className="cont-box "><span>Pay Online</span>
-                                <input type="radio" name="pay" />
+                                <input type="radio" name="pay" onClick={() => setPayment('POG')} />
                                 <span className="checkmark"></span>
                             </label>
                         </div>
@@ -177,56 +209,64 @@ function Checkout() {
                     <div className="summary">
                         <h4 className="">Summary</h4>
                     </div>
-                    <div className="order-summary-table">
-                        <div className="row">
-                            <div className="col-md-12">
-                                <div className="head-table">
-                                    <a href="/"><p className="bold">AFGHAN CHICKEN</p></a>
+
+                    {
+                        items.map((item) => {
+                            return (
+                                <div className="order-summary-table mt-3">
+                                    <div className="row">
+                                        <div className="col-md-12">
+                                            <div className="head-table">
+                                                <a href="/"><p className="bold">{item.name}</p></a>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 col-6">
+                                            <div className="order-summary-table-content">
+                                                <p >QTY:</p>
+                                                <p className="bold"> {item.quantity}</p>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 col-6">
+                                            <div className="order-summary-table-content">
+                                                <p >Price:</p>
+                                                <p className="bold">₹{item.price}</p>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 col-6">
+                                            <div className="order-summary-table-content">
+                                                <p >Cleaning:</p>
+                                                <p className="bold">₹{item.cleaning_charge}</p>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 col-6">
+                                            <div className="order-summary-table-content">
+                                                <p >Skin Removal:</p>
+                                                <p className="bold">₹{item.skin_removal_charge}</p>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 col-6">
+                                            <p>Cutting:</p>
+                                        </div>
+                                        <div className="col-md-6 col-6">
+                                            <div className="order-summary-table-content">
+                                                <p> {item.cutting_type_name}</p>
+                                                <p className="bold">₹{item.cutting_charge}</p>
+                                            </div>
+                                        </div>
+                                        <div className="order-summary-total">
+                                            <p>Total Price : ₹{total[0]}</p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-md-6 col-6">
-                                <div className="order-summary-table-content">
-                                    <p >QTY:</p>
-                                    <p className="bold"> 1</p>
-                                </div>
-                            </div>
-                            <div className="col-md-6 col-6">
-                                <div className="order-summary-table-content">
-                                    <p >Price:</p>
-                                    <p className="bold">₹262</p>
-                                </div>
-                            </div>
-                            <div className="col-md-6 col-6">
-                                <div className="order-summary-table-content">
-                                    <p >Cleaning:</p>
-                                    <p className="bold">₹8</p>
-                                </div>
-                            </div>
-                            <div className="col-md-6 col-6">
-                                <div className="order-summary-table-content">
-                                    <p >Skin Removal:</p>
-                                    <p className="bold">₹30</p>
-                                </div>
-                            </div>
-                            <div className="col-md-6 col-6">
-                                <p>Cutting:</p>
-                            </div>
-                            <div className="col-md-6 col-6">
-                                <div className="order-summary-table-content">
-                                    <p>Biriyani Cut</p>
-                                    <p className="bold">₹0.0</p>
-                                </div>
-                            </div>
-                            <div className="order-summary-total">
-                                <p>Total Price : ₹300</p>
-                            </div>
-                        </div>
-                    </div>
+                            )
+                        })
+                    }
+
                     <div className="place-order" >
                         <div className="place-order-price">
-                            <p>₹300</p>
+                            <p>₹{overAlltotal}</p>
                         </div>
-                        <a className="place-order-button" href="success.html"><p>Place Order</p></a>
+                        <div className="place-order-button" onClick={placeOrder}><p>Place Order</p></div>
                     </div>
                 </div>
             </div>
