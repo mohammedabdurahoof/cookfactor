@@ -72,7 +72,7 @@ export default function Profile() {
     var phone = localStorage.getItem('phoneNumber')
 
     useEffect(() => {
-
+        var phone = localStorage.getItem('phoneNumber')
         Axios.post('/CurrentUser/GetProfile.php', {
             "mobile": phone,
             "version": "1"

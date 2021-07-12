@@ -16,6 +16,31 @@ function Favourites() {
             console.log(err);
         })
     }, [])
+
+
+    const removeFavourites = (id)=>{
+        var phone = localStorage.getItem('phoneNumber')
+        Axios.post(('/CurrentUser/SetFavourite.php'), {
+            "mobile": phone,
+            "version": "1",
+            "status": false,
+            "id": id
+        }).then((res) => {
+            console.log(res.data);
+            Axios.post(('/CurrentUser/GetFavourites.php'), {
+                "mobile": phone,
+                "version": "1"
+            }).then((res) => {
+                console.log(res.data);
+                setFavourite(res.data.Data);
+            }).catch((err) => {
+                console.log(err);
+            })
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+
     return (
         <div className="tab-pane" id="v-pills-settings" role="tabpanel" ariaLabel="v-pills-settings-tab">
             <h5 className="tab-head">My Favourites</h5>
@@ -39,7 +64,7 @@ function Favourites() {
                                     </div>
                                 </a>
                                 <div className="fav-remove ">
-                                    <button className="fav-remove-button cf-border ">Remove from Favourites</button>
+                                    <button className="fav-remove-button cf-border " onClick={()=>removeFavourites(itm.item_reference)} >Remove from Favourites</button>
                                 </div>
                             </div>
                         )

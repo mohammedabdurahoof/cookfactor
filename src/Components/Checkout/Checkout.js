@@ -31,18 +31,21 @@ function Checkout() {
                 setAddresses(res.data.Data.Addresses)
                 setDeliverySlots(res.data.Data.DeliverySlots)
                 setItems(res.data.Data.Items)
-                for (let i = 0; i < items.length; i++) {
-                    var sum = items[i].quantity * items[i].price + items[i].cleaning_charge + items[i].skin_removal_charge + items[i].cutting_charge
+                var itm = res.data.Data.Items
+                var allSum = []
+                for (let i = 0; i < itm.length; i++) {
+                    var sum = itm[i].quantity * itm[i].price + parseFloat(itm[i].cleaning_charge )+ parseFloat(itm[i].skin_removal_charge) + parseFloat(itm[i].cutting_charge)
                     console.log(sum);
-                    console.log(total);
-                    setTotal([...total, sum]);
+                    allSum.push(sum)
                 }
-                console.log(total);
-                var sum = 0
-                res.data.Data.Items.forEach(item => {
-                    sum += parseFloat(item.quantity * item.price + item.cleaning_charge + item.skin_removal_charge + item.cutting_charge)
+                console.log(allSum);
+                setTotal(allSum)
+
+                var overAll = 0
+                allSum.forEach(item => {
+                    overAll += item
                 });
-                setOverAllTotal(sum)
+                setOverAllTotal(overAll)
 
             }).catch((err) => {
                 console.log(err);
@@ -52,6 +55,9 @@ function Checkout() {
         }
 
     }, [])
+
+   // setTotal([...total, sum]);
+    console.log(total);
 
     const placeOrder = () => {
 
@@ -81,8 +87,8 @@ function Checkout() {
                 "deliveryslot_reference": pickup ? "0" : selectedDeliverySlot,
                 "payment_method": "PayOnline"
             }).then((res) => {
-                console.log(res.data);
-                history.push('/success')
+                console.log(res.data.Data.Summary.TransactionNo);
+                window.location.replace(`https://api.teaknet.org/cookfactor/mobileapi/CurrentUser/MakePayment.php?transaction_no=${res.data.Data.Summary.TransactionNo}`)
             }).catch((err) => {
                 console.log(err);
             })
@@ -164,7 +170,8 @@ function Checkout() {
                                     return (
                                         <button className="delivery-slot-box cf-border" onClick={(e) => {
                                             setSelectedDeliverySlot(slot.description)
-                                            var current = document.getElementsByClassName("active");
+                                            var current = document.getElementsByClassName("delivery-slot-box active")
+                                            console.log(current);
                                             if (current.length > 0) {
                                                 current[0].className = current[0].className.replace(" active", "");
                                             }
@@ -223,8 +230,8 @@ function Checkout() {
                                 addresses.map((address) => {
                                     return (
                                         <div className="address-box cf-border " style={{ width: '250px', inlineSize: '1' }} onClick={(e) => {
-                                            var current = document.getElementsByClassName("active");
                                             setSelectedAddress(address)
+                                            var current = document.getElementsByClassName("address-box cf-border active");
                                             if (current.length > 0) {
                                                 current[0].className = current[0].className.replace(" active", "");
                                             }

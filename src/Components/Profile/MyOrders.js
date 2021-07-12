@@ -9,7 +9,7 @@ function MyOrders() {
         Axios.post(('/CurrentUser/GetOrders.php'), {
             "mobile": phone,
             "version": "1",
-            "status_code": "C"
+            "status_code": "I"
         }).then((res) => {
             console.log(res.data);
             setOrder(res.data.Data.Orders);
@@ -54,11 +54,11 @@ function MyOrders() {
                                                 <p className="order-no-main-text">COD</p>
                                             </div>
                                         </div>
-                                        <div className="order-box-bottom">
+                                        {/* <div className="order-box-bottom">
                                             <button className="order-summary-button">
                                                 Order Summary<i className="bi bi-arrow-right"></i>
                                             </button>
-                                        </div>
+                                        </div> */}
                                     </div>
                                 </div>
                             </div>
