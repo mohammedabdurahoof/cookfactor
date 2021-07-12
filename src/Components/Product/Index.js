@@ -10,16 +10,32 @@ function Index() {
     let { id } = useParams()
     useEffect(() => {
         var phone = localStorage.getItem('phoneNumber')
-        Axios.post('/Item/Retrieve.php', {
-            "mobile": phone,
-            "version": "1",
-            "id": id
-        }).then((res)=>{
-            console.log(res.data.Data);
-            setItem(res.data.Data)
-        }).catch((err)=>{
-            console.log(err);
-        })
+        var uid = localStorage.getItem('uid')
+        if(phone){
+            Axios.post('/Item/Retrieve.php', {
+                "mobile": phone,
+                "version": "1",
+                "id": id
+            }).then((res)=>{
+                console.log(res.data.Data);
+                setItem(res.data.Data)
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }else{
+            Axios.post('/Item/Retrieve.php', {
+                "mobile": '',
+                'uid':uid,
+                "version": "1",
+                "id": id
+            }).then((res)=>{
+                console.log(res.data.Data);
+                setItem(res.data.Data)
+            }).catch((err)=>{
+                console.log(err);
+            })
+        }
+        
     },[])
 
     return (

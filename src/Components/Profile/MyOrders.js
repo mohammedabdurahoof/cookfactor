@@ -11,6 +11,7 @@ function MyOrders() {
             "version": "1",
             "status_code": "C"
         }).then((res) => {
+            console.log(res.data);
             setOrder(res.data.Data.Orders);
         }).catch((err) => {
             console.log(err);

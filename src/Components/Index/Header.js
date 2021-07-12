@@ -1,31 +1,46 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import {TextField} from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import Axios from '../../Axios/Axios';
 
 
 
 
-  
+
 
 function Header(props) {
     const history = useHistory()
     console.log(props.userInfo);
     const item = props.item
+    var phone = localStorage.getItem('phoneNumber')
+    var uid = localStorage.getItem('uid')
 
-    const search = (value)=>{
-        var phone = localStorage.getItem('phoneNumber')
-        Axios.post('/CurrentUser/Search.php',{
-          "mobile": phone,
-          "version": "1",
-          "q": value
-        }).then((res)=>{
-            //console.log(res.data.Data.Item[0].item_reference);
-            history.push(`/product/${res.data.Data.Item[0].item_reference}`)
-        }).catch((err)=>{
-            console.log(err);
-        })
+    const search = (value) => {
+        if(phone){
+            Axios.post('/CurrentUser/Search.php', {
+                "mobile": phone,
+                "version": "1",
+                "q": value
+            }).then((res) => {
+                //console.log(res.data.Data.Item[0].item_reference);
+                history.push(`/product/${res.data.Data.Item[0].item_reference}`)
+            }).catch((err) => {
+                console.log(err);
+            })
+        }else{
+            Axios.post('/CurrentUser/Search.php', {
+                "mobile": '',
+                'uid':uid,
+                "version": "1",
+                "q": value
+            }).then((res) => {
+                //console.log(res.data.Data.Item[0].item_reference);
+                history.push(`/product/${res.data.Data.Item[0].item_reference}`)
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
     }
 
     return (
@@ -48,7 +63,7 @@ function Header(props) {
                                     freeSolo
                                     id="free-solo-2-demo"
                                     disableClearable
-                                    onChange={(e,v)=>search(v)}
+                                    onChange={(e, v) => search(v)}
                                     options={item.map((option) => option.name)}
                                     renderInput={(params) => (
                                         <TextField
@@ -56,7 +71,7 @@ function Header(props) {
                                             //label="Search input"
                                             margin="dense"
                                             //variant="outlined"
-                                            InputProps={{ ...params.InputProps, type: 'search',disableUnderline: true }}
+                                            InputProps={{ ...params.InputProps, type: 'search', disableUnderline: true }}
                                         />
                                     )}
                                 />
@@ -66,18 +81,27 @@ function Header(props) {
                     </div>
                     <div className="col-lg-2 col-md-2 col-3">
                         <div className="nav-menu">
-                            <div className="profile">
-                                <div onClick={() => history.push('/profile')} style={{ cursor: 'pointer' }} className="profile-link">
-                                    <div className="profile-box">
+                            {
+                                phone ? <div className="profile">
+                                    <div onClick={() => history.push('/profile')} style={{ cursor: 'pointer' }} className="profile-link">
+                                        <div className="profile-box">
 
+                                        </div>
+                                        <p>{props.user.name}</p>
                                     </div>
-                                    <p>{props.user.name}</p>
-                                </div>
-                            </div>
+                                </div> :
+                                    <div onClick={() => history.push('/login')} style={{ cursor: 'pointer' }} className="profile-link">
 
-                            <button className=" log-in" style={{ display: 'none' }}>
-                                <i className="bi bi-box-arrow-in-right"></i>
-                            </button>
+                                        <p>Login</p>
+                                        <button className=" log-in" >
+                                            <i className="bi bi-box-arrow-in-right"></i>
+                                        </button>
+                                    </div>
+
+                            }
+
+
+
 
                         </div>
                     </div>

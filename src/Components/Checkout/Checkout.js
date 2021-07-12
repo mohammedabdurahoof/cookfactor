@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router-dom';
 import Slider from "react-slick";
 import Axios from '../../Axios/Axios'
 
@@ -8,44 +9,55 @@ function Checkout() {
     const [items, setItems] = useState([])
     const [total, setTotal] = useState([])
     const [overAlltotal, setOverAllTotal] = useState([])
-    const [payment, setPayment] = useState('')
+    const [payment, setPayment] = useState('COD')
     const [pickup, setPickup] = useState(true)
     const [selectedAddress, setSelectedAddress] = useState({})
     const [selectedDeliverySlot, setSelectedDeliverySlot] = useState('')
+    const history = useHistory()
+
+    const [address1, setAddress1] = useState('')
+    const [address2, setAddress2] = useState('')
+    const [address3, setAddress3] = useState('')
+    const [pincode, setPincode] = useState('')
 
     useEffect(() => {
         var phone = localStorage.getItem('phoneNumber')
-        Axios.post('/CurrentUser/GetCheckoutData.php', {
-            "mobile": phone,
-            "version": "1"
-        }).then((res) => {
-            console.log(res.data);
-            setAddresses(res.data.Data.Addresses)
-            setDeliverySlots(res.data.Data.DeliverySlots)
-            setItems(res.data.Data.Items)
-            for (let i = 0; i < items.length; i++) {
-                var sum = items[i].quantity * items[i].price + items[i].cleaning_charge + items[i].skin_removal_charge + items[i].cutting_charge
-                console.log(sum);
+        if (phone) {
+            Axios.post('/CurrentUser/GetCheckoutData.php', {
+                "mobile": phone,
+                "version": "1"
+            }).then((res) => {
+                console.log(res.data);
+                setAddresses(res.data.Data.Addresses)
+                setDeliverySlots(res.data.Data.DeliverySlots)
+                setItems(res.data.Data.Items)
+                for (let i = 0; i < items.length; i++) {
+                    var sum = items[i].quantity * items[i].price + items[i].cleaning_charge + items[i].skin_removal_charge + items[i].cutting_charge
+                    console.log(sum);
+                    console.log(total);
+                    setTotal([...total, sum]);
+                }
                 console.log(total);
-                setTotal([...total, sum]);
+                var sum = 0
+                res.data.Data.Items.forEach(item => {
+                    sum += parseFloat(item.quantity * item.price + item.cleaning_charge + item.skin_removal_charge + item.cutting_charge)
+                });
+                setOverAllTotal(sum)
 
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            history.push('/login')
+        }
 
-            }
-            console.log(total);
-            var sum = 0
-            res.data.Data.Items.forEach(item => {
-                sum += parseFloat(item.quantity * item.price + item.cleaning_charge + item.skin_removal_charge + item.cutting_charge)
-            });
-            setOverAllTotal(sum)
-
-        }).catch((err) => {
-            console.log(err);
-        })
     }, [])
 
     const placeOrder = () => {
+
         var phone = localStorage.getItem('phoneNumber')
         if (payment === 'COD') {
+            console.log('COD');
             Axios.post('/CurrentUser/CreateOrder.php', {
                 "mobile": phone,
                 "version": "1",
@@ -53,10 +65,58 @@ function Checkout() {
                 "address_reference": pickup ? "0" : selectedAddress,
                 "deliveryslot_reference": pickup ? "0" : selectedDeliverySlot,
                 "payment_method": "COD"
+            }).then((res) => {
+                console.log(res.data);
+                history.push('/success')
+            }).catch((err) => {
+                console.log(err);
             })
         } else {
-
+            console.log('OPG');
+            Axios.post('/CurrentUser/InitPayment.php', {
+                "mobile": phone,
+                "version": "1",
+                "delivery_type": pickup ? "P" : "D",
+                "address_reference": pickup ? "0" : selectedAddress,
+                "deliveryslot_reference": pickup ? "0" : selectedDeliverySlot,
+                "payment_method": "PayOnline"
+            }).then((res) => {
+                console.log(res.data);
+                history.push('/success')
+            }).catch((err) => {
+                console.log(err);
+            })
         }
+    }
+
+    var showAddAddress = (e) => {
+        document.getElementById('select-delivery').className += " active"
+    }
+
+    var cancelAddress = () => {
+        document.getElementById('select-delivery').classList.remove("active")
+    }
+
+    var saveAddress = () => {
+        document.getElementById('select-delivery').classList.remove("active")
+        var phone = localStorage.getItem('phoneNumber')
+        Axios.post('/CurrentUser/SaveAddress.php', {
+            "mobile": phone,
+            "version": "1",
+            "id": 0,
+            "address_line1": address1,
+            "address_line2": address2,
+            "address_line3": address3,
+            "pin_code": pincode,
+            "latitude": "latitude",
+            "longitude": "longitude",
+            "default_address": true, // or false to not set the address as default
+            "status": true //or false To Delete the Address
+        }).then((res) => {
+            console.log(res.data);
+        }).catch((err) => {
+            console.log(err);
+        })
     }
 
     var settings1 = {
@@ -97,7 +157,7 @@ function Checkout() {
                         </div>
                     </div>
                     <div className="delivery-slot">
-                        <h4 className="sub-head">Delivery Slots({Date.toString()})</h4>
+                        <h4 className="sub-head">Delivery Slots({new Date().toDateString()})</h4>
                         <Slider {...settings1} className="delivery-slot-boxes">
                             {
                                 deliverySlots.map((slot) => {
@@ -120,26 +180,26 @@ function Checkout() {
                     <div className="address-block">
                         <div className="myaddress">
                             <h4 className="sub-head">My Addresses</h4>
-                            <button className="delivery-button"><span className="material-icons">add_location_alt</span>Add New Address</button>
+                            <button className="delivery-button" onClick={(e) => showAddAddress(e)} ><span className="material-icons">add_location_alt</span>Add New Address</button>
                         </div>
-                        <div className="select-delivery modal">
+                        <div className="select-delivery modal" id='select-delivery'>
                             <div className="modal-data cf-border">
                                 <h6 className="mb-4">Add New Address</h6>
                                 <div className="form-1-div ">
-                                    <input type="" name="Address" className="form-1-input " placeholder="  " />
-                                    <label className="form-1-label">Address Line 1</label>
+                                    <input type="" name="Address" className="form-1-input " placeholder="  " onChange={(e) => setAddress1(e.target.value)} />
+                                    <label className="form-1-label"  >Address Line 1</label>
                                 </div>
                                 <div className="form-1-div ">
-                                    <input type="" name="Address" className="form-1-input " placeholder="  " />
+                                    <input type="" name="Address" className="form-1-input " placeholder="  " onChange={(e) => setAddress2(e.target.value)} />
                                     <label className="form-1-label">Address Line 2</label>
                                 </div>
                                 <div className="form-1-div ">
-                                    <input type="" name="Address" className="form-1-input " placeholder="  " />
+                                    <input type="" name="Address" className="form-1-input " placeholder="  " onChange={(e) => setAddress3(e.target.value)} />
                                     <label className="form-1-label">Address Line 3</label>
                                 </div>
                                 <div className="form-1-div location-div ">
-                                    <input type="" name="" className="form-1-input " placeholder="  " />
-                                    <label className="form-1-label">Location</label>
+                                    <input type="" name="" className="form-1-input " placeholder="  " onChange={(e) => setPincode(e.target.value)} />
+                                    <label className="form-1-label">Pincode</label>
                                     <span className="material-icons">gps_fixed</span>
                                 </div>
                                 <div className="pretty mt-2 p-svg p-curve">
@@ -153,8 +213,8 @@ function Checkout() {
                                     </div>
                                 </div>
                                 <div className="button-group d-flex ">
-                                    <button className="save-btn">Save</button>
-                                    <button className="cancel-btn">Cancel</button>
+                                    <button className="save-btn" onClick={saveAddress} >Save</button>
+                                    <button className="cancel-btn" onClick={cancelAddress} >Cancel</button>
                                 </div>
                             </div>
                         </div>
@@ -163,8 +223,8 @@ function Checkout() {
                                 addresses.map((address) => {
                                     return (
                                         <div className="address-box cf-border " style={{ width: '250px', inlineSize: '1' }} onClick={(e) => {
-                                            setSelectedAddress(address)
                                             var current = document.getElementsByClassName("active");
+                                            setSelectedAddress(address)
                                             if (current.length > 0) {
                                                 current[0].className = current[0].className.replace(" active", "");
                                             }
@@ -266,7 +326,7 @@ function Checkout() {
                         <div className="place-order-price">
                             <p>₹{overAlltotal}</p>
                         </div>
-                        <div className="place-order-button" onClick={placeOrder}><p>Place Order</p></div>
+                        <div className="place-order-button" style={{ cursor: 'pointer' }} onClick={placeOrder}><p>Place Order</p></div>
                     </div>
                 </div>
             </div>

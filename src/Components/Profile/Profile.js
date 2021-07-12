@@ -67,7 +67,8 @@ export default function Profile() {
     const [value, setValue] = React.useState(0);
 
     const history = useHistory()
-    const [user, setUser] = useState({})
+    const [user, setUser] = useState([])
+    const [address, setAddress] = useState([])
     var phone = localStorage.getItem('phoneNumber')
 
     useEffect(() => {
@@ -77,6 +78,7 @@ export default function Profile() {
             "version": "1"
         }).then((res) => {
             setUser(res.data.Data.UserInfo)
+            setAddress(res.data.Data.Addresses)
         }).catch((err) => {
             console.log(err);
         })
@@ -199,7 +201,7 @@ export default function Profile() {
                             <MyOrders />
                         </TabPanel>
                         <TabPanel value={value} index={2}>
-                            <MyAddresses />
+                            <MyAddresses address={address}/>
                         </TabPanel>
                         <TabPanel value={value} index={3}>
                             <Favourites />

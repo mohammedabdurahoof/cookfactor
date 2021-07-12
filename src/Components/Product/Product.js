@@ -14,6 +14,7 @@ function Product(props) {
 
     console.log(props.item);
     var phone = localStorage.getItem('phoneNumber')
+    var uid = localStorage.getItem('uid')
     const setFavourite = (e, id) => {
         e.target.className += " active";
         Axios.post('/CurrentUser/SetFavourite.php', {
@@ -47,24 +48,47 @@ function Product(props) {
 
 
     const addToCart = (e) => {
-        Axios.post('/CurrentUser/AddToCart.php', {
-            "mobile": phone,
-            "version": "1",
-            "id": props.item.item_reference,
-            "quantity": quantity,
-            "cooking": props.item.cooking,
-            "marination": marination,
-            "cutting": cutting,
-            "skin_removal": skinRemove,
-            "cleaning": cleaning
-        }).then((res) => {
-            console.log(res.data);
-            var se = document.getElementById('viewCart').className += " active"
-            console.log(se);
-            e.target.className += " active"
-        }).catch((err) => {
-            console.log(err);
-        })
+        if(phone){
+            Axios.post('/CurrentUser/AddToCart.php', {
+                "mobile": phone,
+                "version": "1",
+                "id": props.item.item_reference,
+                "quantity": quantity,
+                "cooking": props.item.cooking,
+                "marination": marination,
+                "cutting": cutting,
+                "skin_removal": skinRemove,
+                "cleaning": cleaning
+            }).then((res) => {
+                console.log(res.data);
+                var se = document.getElementById('viewCart').className += " active"
+                console.log(se);
+                e.target.className += " active"
+            }).catch((err) => {
+                console.log(err);
+            })
+        }else{
+            Axios.post('/CurrentUser/AddToCart.php', {
+                "mobile": '',
+                'uid':uid,
+                "version": "1",
+                "id": props.item.item_reference,
+                "quantity": quantity,
+                "cooking": props.item.cooking,
+                "marination": marination,
+                "cutting": cutting,
+                "skin_removal": skinRemove,
+                "cleaning": cleaning
+            }).then((res) => {
+                console.log(res.data);
+                var se = document.getElementById('viewCart').className += " active"
+                console.log(se);
+                e.target.className += " active"
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
+        
     }
 
     return (
