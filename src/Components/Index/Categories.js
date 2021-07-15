@@ -1,19 +1,11 @@
 import React, { useContext } from 'react'
+import { useHistory } from 'react-router-dom';
 import Slider from "react-slick";
-import {CategoryContext} from '../../store/Context'
+import { CategoryContext } from '../../store/Context'
 
 function Categories(props) {
-    const {setCategory} = useContext(CategoryContext)
-    var activeClass = (e,index) => {
-        var current = document.getElementsByClassName("active");
-        if (current.length > 0) {
-            current[0].className = current[0].className.replace(" active", "");
-        }
-        e.target.className += " active";
-        let span = document.getElementById(index)
-        setCategory(span.innerHTML)
-    }
-
+    const history = useHistory()
+    
     var settings = {
         infinite: false,
         swipeToSlide: true,
@@ -30,7 +22,8 @@ function Categories(props) {
                     props.category && props.category.map((category, index) => {
                         return (
                             <div className="categories-div" key={index} >
-                                <button className="categories-button cf-border" onClick={(e) => activeClass(e,index)}><span id={index} hidden >{category.category_reference}</span>{category.description}</button>
+                                <span id={index} hidden >{category.category_reference}</span>
+                                <button className="categories-button cf-border" onClick={() => history.push(`/category/${category.category_reference}`)} >{category.description}</button>
                             </div>
                         )
                     })

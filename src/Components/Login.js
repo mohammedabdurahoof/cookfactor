@@ -42,7 +42,7 @@ function Login() {
                     // console.log(confirmationResult);
                     console.log("OTP is sent");
                     setError(false);
-                    localStorage.setItem('phoneNumber',phone)
+                    localStorage.setItem('phoneNumber','+91'+phone)
                     history.push('/otp-login')
 
 

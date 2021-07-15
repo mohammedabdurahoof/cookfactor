@@ -7,6 +7,7 @@ import Axios from '../../Axios/Axios'
 
 function Index() {
     const [item,setItem] = useState({})
+    const [price, setPrice] = useState(0)
     let { id } = useParams()
     useEffect(() => {
         var phone = localStorage.getItem('phoneNumber')
@@ -19,6 +20,7 @@ function Index() {
             }).then((res)=>{
                 console.log(res.data.Data);
                 setItem(res.data.Data)
+                setPrice(res.data.Data.price * res.data.Data.min_order)
             }).catch((err)=>{
                 console.log(err);
             })
@@ -31,6 +33,7 @@ function Index() {
             }).then((res)=>{
                 console.log(res.data.Data);
                 setItem(res.data.Data)
+                setPrice(res.data.Data.price * res.data.Data.min_order)
             }).catch((err)=>{
                 console.log(err);
             })
@@ -41,7 +44,7 @@ function Index() {
     return (
         <>
             <Header />
-            <Product item={item}/>
+            <Product item={item} price={price} setPrice={setPrice}/>
         </>
     )
 }

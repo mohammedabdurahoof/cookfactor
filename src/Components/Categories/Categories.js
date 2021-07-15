@@ -1,17 +1,49 @@
-import React, { useContext } from 'react'
-import { useHistory } from 'react-router-dom'
-import { CategoryContext } from '../../store/Context'
+import React, { useEffect, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
+import Axios from '../../Axios/Axios'
 
-function Product(props) {
+function Categories() {
+    let { id } = useParams()
+
+    const [items, setItems] = useState([])
     const history = useHistory()
-    var items = props.item
+
+    useEffect(() => {
+        var phone = localStorage.getItem('phoneNumber')
+        var uid = localStorage.getItem('uid')
+        if(phone){
+            Axios.post('/CurrentUser/CategoryItem.php', {
+                "mobile": phone,
+                "version": "1",
+                "id":id
+            }).then((res) => {
+                console.log(res.data)
+                setItems(res.data.Data.Item)
+            }).catch((err) => {
+                console.log(err);
+            })
+        }else{
+            Axios.post('/CurrentUser/CategoryItem.php', {
+                "mobile": '',
+                "version": "1",
+                'uid':uid,
+                'id':id
+            }).then((res) => {
+                console.log(res.data)
+                setItems(res.data.Data.Item)
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
+        
+    }, [])
 
     return (
-        <div>
+        <div className='container'>
             <div className="product-section">
                 <div className="row">
                     <div className="section-title">
-                        <h3>{props.SectionTitle}</h3>
+                        <h3>Popular products</h3>
                     </div>
                     <div className="product-div d-flex " id="items-div">
 
@@ -43,4 +75,4 @@ function Product(props) {
     )
 }
 
-export default Product
+export default Categories

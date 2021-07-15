@@ -42,7 +42,7 @@ function Favourites() {
     }
 
     return (
-        <div className="tab-pane" id="v-pills-settings" role="tabpanel" ariaLabel="v-pills-settings-tab">
+        <div className="tab-pane">
             <h5 className="tab-head">My Favourites</h5>
             <div className="row ">
                 {

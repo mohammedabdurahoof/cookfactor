@@ -44,8 +44,8 @@ function Header(props) {
     }
 
     return (
-        <header className="header home">
-            <div className="navhome">
+        <header className="header home scroll" >
+            <div className="navhome container">
                 <div className="row">
                     <div className="col-lg-2 col-md-3 col-12 ">
                         <div className="logo ">

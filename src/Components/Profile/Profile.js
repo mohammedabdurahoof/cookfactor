@@ -135,8 +135,7 @@ export default function Profile() {
                         >
 
                             <Tab label={
-                                <a className="nav-link active" onClick={(e) => addActiveClass(e)} id="my-info" data-toggle="pill" href="#myInfo" role="tab"
-                                    aria-controls="myInfo" aria-selected="true">
+                                <a className="nav-link active" onClick={(e) => addActiveClass(e)} >
                                     <div className="tab-button">
                                         <span className="mobile-tab mobile"><i className="bi bi-person"></i></span>
                                         <span className="web-tab">
@@ -147,8 +146,7 @@ export default function Profile() {
                                 </a>
                             } {...a11yProps(0)} />
                             <Tab label={
-                                <a className="nav-link  " onClick={(e) => addActiveClass(e)} data-toggle="pill" href="#v-pills-profile" role="tab"
-                                    aria-controls="v-pills-profile" aria-selected="false">
+                                <a className="nav-link  " onClick={(e) => addActiveClass(e)} >
                                     <div className="tab-button">
                                         <span className="mobile-tab mobile"><i className="bi bi-shop fs"></i></span>
                                         <span className="web-tab">
@@ -159,8 +157,7 @@ export default function Profile() {
                                 </a>
                             } {...a11yProps(1)} />
                             <Tab label={
-                                <a className="nav-link  " onClick={(e) => addActiveClass(e)} data-toggle="pill" href="#myAddresses" role="tab"
-                                    aria-controls="myAddresses" aria-selected="false">
+                                <a className="nav-link  " onClick={(e) => addActiveClass(e)} >
                                     <div className="tab-button">
                                         <span className="mobile-tab mobile"><i className="bi bi-geo-alt fs"></i></span>
                                         <span className="web-tab">
@@ -171,8 +168,7 @@ export default function Profile() {
                                 </a>
                             } {...a11yProps(2)} />
                             <Tab label={
-                                <a className="nav-link  " onClick={(e) => addActiveClass(e)} data-toggle="pill" href="#v-pills-settings" role="tab"
-                                    aria-controls="v-pills-settings" aria-selected="false">
+                                <a className="nav-link  " onClick={(e) => addActiveClass(e)} >
                                     <div className="tab-button">
                                         <span className="mobile-tab mobile"><i className="bi bi-heart fs"></i></span>
                                         <span className="web-tab">

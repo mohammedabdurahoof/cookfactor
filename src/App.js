@@ -7,6 +7,7 @@ import Checkout from './Components/Checkout/Index'
 import Success from './Components/Success/Index'
 import Profile from './Components/Profile/Index'
 import Product from './Components/Product/Index'
+import Categories from './Components/Categories/Index'
 import Login from './Components/Login';
 import OtpLogin from './Components/OtpLogin';
 import NewUser from './Components/NewUser';
@@ -40,6 +41,9 @@ function App() {
       </Route>
       <Route exact path='/product/:id'>
         <Product />
+      </Route>
+      <Route exact path='/category/:id'>
+        <Categories />
       </Route>
     </Router>
   );

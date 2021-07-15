@@ -15,6 +15,7 @@ function Index() {
     const [category, setCategory] = useState([])
     const [item, setItem] = useState([])
     const [userInfo, setUserInfo] = useState([])
+    const [title, setTitle] = useState('')
 
 
     useEffect(() => {
@@ -31,6 +32,7 @@ function Index() {
                 setCategory(data.Category)
                 setItem(data.Item)
                 setUserInfo(data.UserInfo)
+                setTitle(data.SectionTitle)
             }).catch((err) => {
                 console.log(err)
             })
@@ -58,6 +60,7 @@ function Index() {
                     setCart(data.Cart)
                     setCategory(data.Category)
                     setItem(data.Item)
+                    setTitle(data.SectionTitle)
                     setUserInfo(data.UserInfo)
                 }).catch((err) => {
                     console.log(err)
@@ -71,12 +74,13 @@ function Index() {
 
     return (
         <Category>
-            <div className='container'>
                 <Header user={userInfo} item={item} />
+
+            <div className='container' style={{marginTop:'100px'}}>
                 <CartIcon cart={cart} />
                 <Banner item={item} />
                 <Categories category={category} />
-                <Product item={item} />
+                <Product item={item} SectionTitle={title} />
             </div>
         </Category>
     )
