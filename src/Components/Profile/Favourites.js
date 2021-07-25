@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Axios from '../../Axios/Axios'
 
 function Favourites() {
@@ -44,12 +45,12 @@ function Favourites() {
     return (
         <div className="tab-pane">
             <h5 className="tab-head">My Favourites</h5>
-            <div className="row ">
+            {favourite.length ? <div className="row ">
                 {
                     favourite.map((itm, key) => {
                         return (
-                            <div className="col-md-6 col-12 mb-4">
-                                <a href="/">
+                            <div className="col-lg-6 col-md-12 mb-4">
+                                <Link to={"/product/"+itm.item_reference}>
                                     <div className="product-box">
                                         <div className="product-image" style={{ backgroundImage: `url(${itm.image})` }}>
                                         </div>
@@ -62,7 +63,7 @@ function Favourites() {
                                             </div>
                                         </div>
                                     </div>
-                                </a>
+                                </Link>
                                 <div className="fav-remove ">
                                     <button className="fav-remove-button cf-border " onClick={()=>removeFavourites(itm.item_reference)} >Remove from Favourites</button>
                                 </div>
@@ -71,7 +72,7 @@ function Favourites() {
                     })
                 }
 
-            </div>
+            </div>:<h4>"No item in Favourites"</h4>}
         </div>
     )
 }

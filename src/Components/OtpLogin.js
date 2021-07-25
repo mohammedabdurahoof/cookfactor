@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import Axios from '../Axios/Axios'
+import logo from '../assets/images/logo.jpg'
 
 
 function OtpLogin() {
@@ -26,11 +27,12 @@ function OtpLogin() {
                 }).then((res) => {
                     console.log(res.data)
                     setError(false);
-                    var data = res.data
-                    if (data.EmailSpecified === false) {
-                        history.push('/new-user')
-                    } else {
+                    var data = res.data.Settings
+                    if (data.EmailSpecified) {
                         history.push('/')
+
+                    } else {
+                        history.push('/new-user')
                     }
                 }).catch((err) => {
                     console.log(err);
@@ -49,6 +51,10 @@ function OtpLogin() {
                 <img src="" alt='' />
             </div>
             <div className="form-register" id="loginFormInput">
+                    <div className="logo-img">
+                        <img src={logo} alt="logo" />
+                    </div>
+
                 <h1 className="form-1-title">Sign-In or Register </h1>
 
                 <div className="form-1-div">

@@ -8,7 +8,8 @@ function Product(props) {
 
     return (
         <div>
-            <div className="product-section">
+            {
+                props.item.length ? <div className="product-section">
                 <div className="row">
                     <div className="section-title">
                         <h3>{props.SectionTitle}</h3>
@@ -18,7 +19,7 @@ function Product(props) {
                         {
                             items && items.map((item, index) => {
                                 return (
-                                    <div className="col-lg-4 col-md-4 col-12" key={index} >
+                                    <div className="col-lg-4 col-md-6 col-12" key={index} >
                                         <div onClick={() => history.push(`/product/${item.item_reference}`)}>
                                             <div className="product-box">
                                                 <div className="product-image" style={{ backgroundImage: `url(${item.image})` }} ></div>
@@ -38,7 +39,11 @@ function Product(props) {
                         }
                     </div>
                 </div>
-            </div>
+            </div> : <div class="center-loading">
+                    <div class="loading-anim"></div>
+                </div>
+            }
+            
         </div>
     )
 }

@@ -9,6 +9,7 @@ import Banner from './Banner';
 import Categories from './Categories';
 import Product from './Product';
 import Category from '../../store/Context';
+import Footer from '../Footer';
 
 function Index() {
     const [cart, setCart] = useState([])
@@ -72,17 +73,34 @@ function Index() {
 
     }, [])
 
+    category.sort(function (a, b) {
+        return a.sort_order - b.sort_order;
+    });
+
+    item.sort(function (a, b) {
+        return a.sort_order - b.sort_order;
+    });
     return (
         <Category>
-                <Header user={userInfo} item={item} />
+            {
+                item.length ? <>
+                    <Header user={userInfo} item={item} />
 
-            <div className='container' style={{marginTop:'100px'}}>
-                <CartIcon cart={cart} />
-                <Banner item={item} />
-                <Categories category={category} />
-                <Product item={item} SectionTitle={title} />
-            </div>
+                    <div className='container' style={{ marginTop: '100px' }}>
+                        <CartIcon cart={cart} />
+                        <Banner item={item} />
+                        <Categories category={category} />
+                        <Product item={item} SectionTitle={title} />
+                    </div>
+
+                    <Footer />
+                </> : <div class="center-loading">
+                    <div class="loading-anim"></div>
+                </div>
+            }
+
         </Category>
+
     )
 }
 

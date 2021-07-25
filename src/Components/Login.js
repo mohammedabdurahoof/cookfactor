@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import validator from 'validator'
 import firebase from '../firebase/config'
+import logo from '../assets/images/logo.jpg'
 
 
 
@@ -42,7 +43,7 @@ function Login() {
                     // console.log(confirmationResult);
                     console.log("OTP is sent");
                     setError(false);
-                    localStorage.setItem('phoneNumber','+91'+phone)
+                    localStorage.setItem('phoneNumber', '+91' + phone)
                     history.push('/otp-login')
 
 
@@ -56,7 +57,7 @@ function Login() {
         }
     };
 
-    
+
 
     return (
         <div>
@@ -66,6 +67,9 @@ function Login() {
                     <img src="" alt='' />
                 </div>
                 <div className="form-register" id="loginFormInput">
+                    <div className="logo-img">
+                        <img src={logo} alt="logo" />
+                    </div>
                     <h1 className="form-1-title">Sign-In or Register </h1>
 
                     <div className="form-1-div firstform">
@@ -104,3 +108,11 @@ function Login() {
 
 export default Login
 
+
+
+
+// GoDaddy 
+
+// Username : agentkitchenofficial
+
+// AGENTkitchen@123

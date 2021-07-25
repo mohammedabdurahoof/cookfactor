@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import validator from 'validator'
 import Axios from '../Axios/Axios'
+import logo from '../assets/images/logo.jpg'
 
 function NewUser() {
     const [userName, setUserName] = useState('')
@@ -38,6 +39,10 @@ function NewUser() {
                 <img src="" alt='' />
             </div>
             <div className="form-register" id="userNewForm">
+                    <div className="logo-img">
+                        <img src={logo} alt="logo" />
+                    </div>
+
                 <h1 className="form-1-title">Enter your details </h1>
 
                 <div className="form-1-div">

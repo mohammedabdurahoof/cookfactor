@@ -11,23 +11,23 @@ function Categories() {
     useEffect(() => {
         var phone = localStorage.getItem('phoneNumber')
         var uid = localStorage.getItem('uid')
-        if(phone){
+        if (phone) {
             Axios.post('/CurrentUser/CategoryItem.php', {
                 "mobile": phone,
                 "version": "1",
-                "id":id
+                "id": id
             }).then((res) => {
                 console.log(res.data)
                 setItems(res.data.Data.Item)
             }).catch((err) => {
                 console.log(err);
             })
-        }else{
+        } else {
             Axios.post('/CurrentUser/CategoryItem.php', {
                 "mobile": '',
                 "version": "1",
-                'uid':uid,
-                'id':id
+                'uid': uid,
+                'id': id
             }).then((res) => {
                 console.log(res.data)
                 setItems(res.data.Data.Item)
@@ -35,42 +35,51 @@ function Categories() {
                 console.log(err);
             })
         }
-        
+
     }, [])
+
+    items.sort(function (a, b) {
+        return a.sort_order - b.sort_order;
+    });
 
     return (
         <div className='container'>
-            <div className="product-section">
+            {
+                items.length ? <div className="product-section category-list">
                 <div className="row">
                     <div className="section-title">
                         <h3>Popular products</h3>
                     </div>
-                    <div className="product-div d-flex " id="items-div">
+                </div>
+                <div className="product-div d-flex row" id="items-div">
 
-                        {
-                            items && items.map((item, index) => {
-                                return (
-                                    <div className="col-lg-4 col-md-4 col-12" key={index} >
-                                        <div onClick={() => history.push(`/product/${item.item_reference}`)}>
-                                            <div className="product-box">
-                                                <div className="product-image" style={{ backgroundImage: `url(${item.image})` }} ></div>
-                                                <div className="product-desc">
-                                                    <div className="product-title">
-                                                        <h5>{item.name} </h5>
-                                                    </div>
-                                                    <div className="product-price">
-                                                        <h6>₹<span>{item.price}</span></h6>
-                                                    </div>
+                    {
+                        items && items.map((item, index) => {
+                            return (
+                                <div className="col-lg-4 col-md-6 col-12" key={index} >
+                                    <div onClick={() => history.push(`/product/${item.item_reference}`)}>
+                                        <div className="product-box">
+                                            <div className="product-image" style={{ backgroundImage: `url(${item.image})` }} ></div>
+                                            <div className="product-desc">
+                                                <div className="product-title">
+                                                    <h5>{item.name} </h5>
+                                                </div>
+                                                <div className="product-price">
+                                                    <h6>₹<span>{item.price}</span></h6>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                )
-                            })
-                        }
-                    </div>
+                                </div>
+                            )
+                        })
+                    }
                 </div>
-            </div>
+            </div> : <div class="center-loading">
+                    <div class="loading-anim"></div>
+                </div>
+            }
+            
         </div>
     )
 }

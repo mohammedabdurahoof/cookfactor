@@ -11,6 +11,7 @@ import Categories from './Components/Categories/Index'
 import Login from './Components/Login';
 import OtpLogin from './Components/OtpLogin';
 import NewUser from './Components/NewUser';
+import Comingsoon from './Components/Comingsoon';
 
 function App() {
   return (
@@ -42,8 +43,14 @@ function App() {
       <Route exact path='/product/:id'>
         <Product />
       </Route>
+      <Route exact path='/r_product/:id'>
+        <Product />
+      </Route>
       <Route exact path='/category/:id'>
         <Categories />
+      </Route>
+      <Route exact path='/comingsoon'>
+        <Comingsoon />
       </Route>
     </Router>
   );

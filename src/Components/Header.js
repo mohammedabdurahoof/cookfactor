@@ -23,11 +23,7 @@ function Header() {
             <div className="container">
                 <div className="back">
                     <div onClick={() => history.push('/')} style={{ cursor: 'pointer' }} ><i className="bi bi-arrow-left"></i><span className="web">Back to home</span></div>
-                    {
-                        phone ? <h1 className="check-out-logo" onClick={() => history.push('/profile')} style={{ cursor: 'pointer' }} >{userName}</h1> :
-                            <h1 className="check-out-logo" onClick={() => history.push('/login')} style={{ cursor: 'pointer' }} >Login</h1>
-                    }
-
+                    <h1 className="check-out-logo">Cook Factor</h1>
                 </div>
             </div>
         </header>

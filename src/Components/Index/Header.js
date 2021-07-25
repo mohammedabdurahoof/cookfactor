@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { TextField } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -10,6 +10,7 @@ import Axios from '../../Axios/Axios';
 
 
 function Header(props) {
+    const [searchRes, setSearchRes] = useState([])
     const history = useHistory()
     console.log(props.userInfo);
     const item = props.item
@@ -23,7 +24,35 @@ function Header(props) {
                 "version": "1",
                 "q": value
             }).then((res) => {
-                //console.log(res.data.Data.Item[0].item_reference);
+                console.log(res.data.Data);
+                setSearchRes(res.data.Data.Item)
+            }).catch((err) => {
+                console.log(err);
+            })
+        }else{
+            Axios.post('/CurrentUser/Search.php', {
+                "mobile": '',
+                'uid':uid,
+                "version": "1",
+                "q": value
+            }).then((res) => {
+                console.log(res.data.Data);
+                setSearchRes(res.data.Data.Item)
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
+    }
+
+    const searchRedi = (value) => {
+        if(phone){
+            Axios.post('/CurrentUser/Search.php', {
+                "mobile": phone,
+                "version": "1",
+                "q": value
+            }).then((res) => {
+                console.log(res.data.Data);
+                setSearchRes(res.data.Data.Item)
                 history.push(`/product/${res.data.Data.Item[0].item_reference}`)
             }).catch((err) => {
                 console.log(err);
@@ -63,19 +92,17 @@ function Header(props) {
                                     freeSolo
                                     id="free-solo-2-demo"
                                     disableClearable
-                                    onChange={(e, v) => search(v)}
-                                    options={item.map((option) => option.name)}
+                                    onChange={(e, v) => searchRedi(v)}
+                                    options={searchRes ? searchRes.map((option) => option.name):[]}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
-                                            //label="Search input"
+                                            onChange={(e) => search(e.target.value)}
                                             margin="dense"
-                                            //variant="outlined"
                                             InputProps={{ ...params.InputProps, type: 'search', disableUnderline: true }}
                                         />
                                     )}
                                 />
-                                {/* <input type="text" className="form-control search-input" placeholder="Search" /> */}
                             </div>
                         </div>
                     </div>

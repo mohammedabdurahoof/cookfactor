@@ -6,18 +6,20 @@ import {
     CardMedia,
     Grid
 } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
 function Project(props) {
     if (props.newProp) console.log(props.newProp)
-
-
+    const history = useHistory()
+    console.log(props);
     return (
         <Card raised className="Banner">
             <Grid container spacing={0} className="">
                 <Grid item xs={12} >
                     <CardMedia
                         className="Media"
-                        image={props.item}
+                        image={props.item.image}
+                        onClick={()=>history.push(`/product/${props.item.id}`)}
                     >
                     </CardMedia>
 
@@ -33,7 +35,7 @@ function Banner(props) {
     const items = []
     props.item && props.item.forEach(element => {
         if(element.offer_item === true){
-            items.push(element.image)
+            items.push({image:element.image,id:element.item_reference})
         }
     });
     //console.log(props.banner);
@@ -43,7 +45,7 @@ function Banner(props) {
                 className="Example"
                 autoPlay={true}
                 animation='fade'
-                indicators={true}
+                indicators={false}
                 timeout={500}
                 cycleNavigation={true}
                 navButtonsAlwaysVisible={false}
